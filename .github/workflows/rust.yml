@@ -10,10 +10,19 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
+  depend:
     runs-on: ubuntu-latest
+    steps:
+    - name: Install Dependencies
+      run: |
+        sudo apt install libxcb-shape0-dev
+        sudo apt install libxcb-xfixes0-dev
+      
+      
 
+  build:
+    runs-on: ubuntu-latest
+    needs: depend
     steps:
     - uses: actions/checkout@v3
     - name: Build
