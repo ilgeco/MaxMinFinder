@@ -10,7 +10,7 @@
   
 
 ```bash
-cargo build --relase
+cargo build --release
 ```
 
   
