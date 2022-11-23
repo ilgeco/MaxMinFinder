@@ -1,0 +1,29 @@
+[package]
+authors = ["Gabriele Magnani"]
+name = "max-min"
+version = "0.1.0"
+edition = "2021"
+
+
+[[bin]]
+name = "max"
+path = "src/max.rs"
+
+
+
+[[bin]]
+name = "min"
+path = "src/min.rs"
+
+
+[features]
+default = ["other"]
+other = ["clap/derive"]
+
+
+
+[dependencies]
+clap = "*"
+terminal-clipboard = "*"
+regex = "*"
+atty = "*"
