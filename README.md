@@ -1,3 +1,4 @@
+![Scrutinizer build (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/build/g/ilgeco/MaxMinFinder/master?style=plastic)
 
 **Provide an easy way to find the minimum/maximum number from File/ClipBoard/Stdin**
 [Wiki](https://ilgeco.github.io/MaxMinFinder/max/)
