@@ -1,5 +1,5 @@
 var sourcesIndex = JSON.parse('{\
-"max":["",[],["max.rs"]],\
-"min":["",[],["min.rs"]]\
+"max":["",[["parser",[],["mod.rs"]]],["max.rs"]],\
+"min":["",[["parser",[],["mod.rs"]]],["min.rs"]]\
 }');
 createSourceSidebar();
