@@ -20,7 +20,6 @@
 //!
 
 #![deny(missing_docs)]
-#![deny(warnings)]
 
 use std::{
     cmp::Ordering,
@@ -30,8 +29,10 @@ use std::{
     process::exit,
 };
 
+mod parser;
+
 use clap::Parser;
-use regex::Regex;
+use parser::FloatIter;
 use terminal_clipboard::get_string;
 
 /// Provide an easy way to find the minimum number from File/ClipBoard/Stdin
@@ -102,8 +103,20 @@ fn retrive_stdin() -> io::Result<String> {
     }
 }
 
+fn find_min_double(input: &str) -> Option<f64> {
+    let min = FloatIter::new(&input).min_by(|&x, &y| {
+        if x > y {
+            return Ordering::Greater;
+        } else if y > x {
+            return Ordering::Less;
+        }
+        return Ordering::Equal;
+    });
+
+    min
+}
+
 fn main() {
-    let number_re = Regex::new(r"(?:-)?[0-9]+([.,][0-9]+)?").unwrap();
     let args = Args::parse();
     let retrived = match args.file {
         Some(x) => retrive_file(x),
@@ -113,17 +126,7 @@ fn main() {
         },
     };
 
-    let min = number_re
-        .captures_iter(&retrived)
-        .map(|x| x[0].parse::<f64>().unwrap())
-        .min_by(|&x, &y| {
-            if x > y {
-                return Ordering::Greater;
-            } else if y > x {
-                return Ordering::Less;
-            }
-            return Ordering::Equal;
-        });
+    let min = find_min_double(&retrived);
 
     match min {
         Some(x) => {

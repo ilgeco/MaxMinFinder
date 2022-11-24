@@ -19,19 +19,20 @@
 //!    
 
 #![deny(missing_docs)]
-#![deny(warnings)]
 
 use std::{
     cmp::Ordering,
     fs::{self},
-    io::{self, Read, ErrorKind},
+    io::{self, ErrorKind, Read},
     path::Path,
     process::exit,
 };
 
 use clap::Parser;
-use regex::Regex;
+use parser::FloatIter;
 use terminal_clipboard::get_string;
+mod parser;
+
 
 /// Provide an easy way to find the minimum number from File/ClipBoard/Stdin
 /// See doc for full guide
@@ -101,8 +102,23 @@ fn retrive_stdin() -> io::Result<String> {
     }
 }
 
+
+
+
+fn find_max_double(input: &str) -> Option<f64> {
+    let max = FloatIter::new(&input).max_by(|&x, &y| {
+        if x > y {
+            return Ordering::Greater;
+        } else if y > x {
+            return Ordering::Less;
+        }
+        return Ordering::Equal;
+    });
+
+    max
+}
+
 fn main() {
-    let number_re = Regex::new(r"(?:-)?[0-9]+([.,][0-9]+)?").unwrap();
     let args = Args::parse();
     let retrived = match args.file {
         Some(x) => retrive_file(x),
@@ -112,17 +128,8 @@ fn main() {
         },
     };
 
-    let max = number_re
-        .captures_iter(&retrived)
-        .map(|x| x[0].parse::<f64>().unwrap())
-        .max_by(|&x, &y| {
-            if x > y {
-                return Ordering::Greater;
-            } else if y > x {
-                return Ordering::Less;
-            }
-            return Ordering::Equal;
-        });
+    let max = find_max_double(&retrived);
+
     match max {
         Some(x) => {
             println!("{}", x);
@@ -130,3 +137,4 @@ fn main() {
         None => {}
     }
 }
+
